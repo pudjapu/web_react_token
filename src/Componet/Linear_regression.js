@@ -11,7 +11,7 @@ import { Button } from 'antd'
 import { ComposedChart, Line ,XAxis , YAxis, CartesianGrid, Scatter, ReferenceLine} from 'recharts';
 
 import axios from 'axios'
-let apiUrl = "http://localhost:4040/data/interpolation/Linear_regression?key=45134Asd4864wadfad"
+const apiUrl = "http://localhost:4040"
 
 class Linear extends React.Component{
 
@@ -28,7 +28,25 @@ class Linear extends React.Component{
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            const data = await axios.post(apiUrl).then(e => (
+            axios.interceptors.request.use(
+                config => {
+                  const { origin } = new URL(config.url);
+                  const allowedOrigins = [apiUrl];
+                  const token = localStorage.getItem('token');
+                  if (allowedOrigins.includes(origin)) {
+                    config.headers.authorization = `Bearer ${token}`;
+                  }
+                  return config;
+                },
+                error => {
+                  return Promise.reject(error);
+                }
+              );
+
+            const data_api = await axios.post(`${apiUrl}/jwt`);
+            localStorage.setItem('token', data_api.data["token"]);
+
+            const data = await axios.post(`${apiUrl}/data/interpolation/Linear_regression`).then(e => (
                 e.data
             ))
             

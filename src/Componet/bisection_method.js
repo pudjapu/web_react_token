@@ -8,12 +8,13 @@ import { bisection } from './Source/bisection'
 import axios from 'axios'
 import '../css/bisecton.css';
 
-let apiUrl = "http://localhost:4040/data/root/Bisection?key=45134Asd4864wadfad"
+const apiUrl = "http://localhost:4040"
 // let apiUrl = "https://my-json-server.typicode.com/pudjapu/react_wep/root"
 
+const storedJwt = localStorage.getItem('token');
 
 class Bisection extends React.Component{
-
+    
     state = {
         Equation: '',
         XL: '',
@@ -23,13 +24,31 @@ class Bisection extends React.Component{
         Chart: ''
       };
 
-
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            const data = await axios.post(apiUrl).then(e => (
-                e.data
-            ))
+            axios.interceptors.request.use(
+                config => {
+                  const { origin } = new URL(config.url);
+                  const allowedOrigins = [apiUrl];
+                  const token = localStorage.getItem('token');
+                  if (allowedOrigins.includes(origin)) {
+                    config.headers.authorization = `Bearer ${token}`;
+                  }
+                  return config;
+                },
+                error => {
+                  return Promise.reject(error);
+                }
+              );
+
+            const data_api = await axios.post(`${apiUrl}/jwt`);
+            localStorage.setItem('token', data_api.data["token"]);
+
+            const data = await axios.post(`${apiUrl}/data/root/Bisection`).then(res => (
+                res.data
+            ));
+
             
             this.setState({Equation: data["eqtion"],XL: data["xl"],XR: data["xr"],ERROR: data["error"]})
 
