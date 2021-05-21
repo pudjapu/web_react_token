@@ -7,7 +7,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, ReferenceLine } from 'rec
 
 
 import axios from 'axios'
-let apiUrl = "http://localhost:4040/data/interpolation/polynomial?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040"
 
 class Polynomial extends React.Component{
 
@@ -23,7 +23,10 @@ class Polynomial extends React.Component{
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            const data = await axios.post(apiUrl).then(e => (
+            const data_api = await axios.post(`${apiUrl}/jwt`);
+            localStorage.setItem('token', data_api.data["token"]);
+
+            const data = await axios.post(`${apiUrl}/data/interpolation/polynomial`).then(e => (
                 e.data
             ))
             

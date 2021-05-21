@@ -5,7 +5,7 @@ import Lu_de from './Source/lu_decompo'
 import { Button } from 'antd'
 
 import axios from 'axios'
-let apiUrl = "http://localhost:4040/data/matrix/Lu_decomposition_method?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040"
 
 class Lu_decomposition extends React.Component{
 
@@ -19,7 +19,10 @@ class Lu_decomposition extends React.Component{
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            const data = await axios.post(apiUrl).then(e => (
+            const data_api = await axios.post(`${apiUrl}/jwt`);
+            localStorage.setItem('token', data_api.data["token"]);
+
+            const data = await axios.post(`${apiUrl}/data/matrix/Lu_decomposition_method`).then(e => (
                 e.data
             ))
             

@@ -8,7 +8,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import axios from 'axios'
 import '../css/false_position.css';
 
-let apiUrl = "http://localhost:4040/data/root/False_position?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040"
 // let apiUrl = "https://my-json-server.typicode.com/pudjapu/react_wep/root"
 
 class False_position extends React.Component{
@@ -25,7 +25,25 @@ class False_position extends React.Component{
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            const data = await axios.post(apiUrl).then(e => (
+            // axios.interceptors.request.use(
+            //     config => {
+            //       const { origin } = new URL(config.url);
+            //       const allowedOrigins = [apiUrl];
+            //       const token = localStorage.getItem('token');
+            //       if (allowedOrigins.includes(origin)) {
+            //         config.headers.authorization = `Bearer ${token}`;
+            //       }
+            //       return config;
+            //     },
+            //     error => {
+            //       return Promise.reject(error);
+            //     }
+            //   );
+
+            const data_api = await axios.post(`${apiUrl}/jwt`);
+            localStorage.setItem('token', data_api.data["token"]);
+
+            const data = await axios.post(`${apiUrl}/data/root/False_position`).then(e => (
                 e.data
             ))
             

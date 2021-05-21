@@ -38,6 +38,8 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import axios from 'axios'
+let apiUrl = "http://localhost:4040"
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -48,6 +50,25 @@ class App extends React.Component {
     collapsed: true,
     at_cack: <Home/>
   };
+
+  componentDidMount(){
+
+    axios.interceptors.request.use(
+      config => {
+        const { origin } = new URL(config.url);
+        const allowedOrigins = [apiUrl];
+        const token = localStorage.getItem('token');
+        if (allowedOrigins.includes(origin)) {
+          config.headers.authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    );
+    
+  }
 
   toggle = () => {
     this.setState({

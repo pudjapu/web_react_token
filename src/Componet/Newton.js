@@ -9,7 +9,7 @@ import { Button } from 'antd';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import axios from 'axios'
-let apiUrl = "http://localhost:4040/data/root/Newton_Raphson?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040"
 // let apiUrl = "https://my-json-server.typicode.com/pudjapu/react_wep/root"
 
 
@@ -26,7 +26,10 @@ class Newton_Raphson extends React.Component{
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            const data = await axios.post(apiUrl).then(e => (
+            const data_api = await axios.post(`${apiUrl}/jwt`);
+            localStorage.setItem('token', data_api.data["token"]);
+
+            const data = await axios.post(`${apiUrl}/data/root/Newton_Raphson`).then(e => (
                 e.data
             ))
             

@@ -11,8 +11,6 @@ import '../css/bisecton.css';
 const apiUrl = "http://localhost:4040"
 // let apiUrl = "https://my-json-server.typicode.com/pudjapu/react_wep/root"
 
-const storedJwt = localStorage.getItem('token');
-
 class Bisection extends React.Component{
     
     state = {
@@ -27,20 +25,20 @@ class Bisection extends React.Component{
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            axios.interceptors.request.use(
-                config => {
-                  const { origin } = new URL(config.url);
-                  const allowedOrigins = [apiUrl];
-                  const token = localStorage.getItem('token');
-                  if (allowedOrigins.includes(origin)) {
-                    config.headers.authorization = `Bearer ${token}`;
-                  }
-                  return config;
-                },
-                error => {
-                  return Promise.reject(error);
-                }
-              );
+            // axios.interceptors.request.use(
+            //     config => {
+            //       const { origin } = new URL(config.url);
+            //       const allowedOrigins = [apiUrl];
+            //       const token = localStorage.getItem('token');
+            //       if (allowedOrigins.includes(origin)) {
+            //         config.headers.authorization = `Bearer ${token}`;
+            //       }
+            //       return config;
+            //     },
+            //     error => {
+            //       return Promise.reject(error);
+            //     }
+            //   );
 
             const data_api = await axios.post(`${apiUrl}/jwt`);
             localStorage.setItem('token', data_api.data["token"]);

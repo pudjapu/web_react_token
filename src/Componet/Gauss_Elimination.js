@@ -9,7 +9,7 @@ import { Button } from 'antd'
 import {Matrix} from './Source/Matrix'
 
 import axios from 'axios'
-let apiUrl = "http://localhost:4040/data/matrix/Gauss_Elimination_Method?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040"
 
 class Gauss_Elimination extends React.Component{
 
@@ -23,7 +23,10 @@ class Gauss_Elimination extends React.Component{
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            const data = await axios.post(apiUrl).then(e => (
+            const data_api = await axios.post(`${apiUrl}/jwt`);
+            localStorage.setItem('token', data_api.data["token"]);
+
+            const data = await axios.post(`${apiUrl}/data/matrix/Gauss_Elimination_Method`).then(e => (
                 e.data
             ))
             

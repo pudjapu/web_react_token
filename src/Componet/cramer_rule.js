@@ -6,7 +6,7 @@ import { Button } from 'antd'
 import {Matrix} from './Source/Matrix'
 
 import axios from 'axios'
-let apiUrl = "http://localhost:4040/data/matrix/cramer_rule?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040"
 
 class Cramer extends React.Component{
 
@@ -20,7 +20,10 @@ class Cramer extends React.Component{
     async gatdata() { // ฟังชั้นเรียก api
         try {
 
-            const data = await axios.post(apiUrl).then(e => (
+            const data_api = await axios.post(`${apiUrl}/jwt`);
+            localStorage.setItem('token', data_api.data["token"]);
+
+            const data = await axios.post(`${apiUrl}/data/matrix/cramer_rule`).then(e => (
                 e.data
             ))
             
